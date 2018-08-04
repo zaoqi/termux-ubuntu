@@ -26,7 +26,7 @@ if [ "$first" != 1 ];then
 	mkdir -p "$folder"
 	cd "$folder"
 	echo "decompressing ubuntu image"
-	apt install squashfs-tools -y
+	apt install squashfs-tools -y ||exit
 	unsquashfs $tarball
 	mv squashfs-root/* ./
 	rmdir squashfs-root||exit

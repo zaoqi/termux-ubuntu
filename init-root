@@ -1,0 +1,7 @@
+#!/bin/sh
+sed -i "s|http://archive.ubuntu.com|http://mirrors.ustc.edu.cn|g" ./etc/apt/sources.list
+sed -i "s|http://ports.ubuntu.com|http://mirrors.ustc.edu.cn|g" ./etc/apt/sources.list
+apt update ||exit
+apt full-upgrade -y ||exit
+apt install locales language-selector-common tightvncserver nano lxde -y ||exit
+#dpkg-reconfigure locales
