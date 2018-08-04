@@ -4,7 +4,7 @@ if [ -d "$folder" ]; then
 	first=1
 	echo "skipping downloading"
 fi
-tarball="ubuntu.tar.gz"
+tarball="ubuntu.squashfs"
 if [ "$first" != 1 ];then
 	if [ ! -f $tarball ]; then
 		echo "downloading ubuntu-image"
@@ -20,15 +20,20 @@ if [ "$first" != 1 ];then
 		*)
 			echo "unknown architecture"; exit 1 ;;
 		esac
-		wget "https://partner-images.canonical.com/core/bionic/current/ubuntu-bionic-core-cloudimg-${archurl}-root.tar.gz" -O $tarball
+		wget "http://mirrors.ustc.edu.cn/ubuntu-cloud-images/bionic/20180802/bionic-server-cloudimg-${archurl}.squashfs" -O $tarball
 	fi
 	cur=`pwd`
 	mkdir -p "$folder"
 	cd "$folder"
 	echo "decompressing ubuntu image"
-	proot --link2symlink tar -xf ${cur}/${tarball} --exclude='dev'||:
-	echo "fixing nameserver, otherwise it can't connect to the internet"
-	echo "nameserver 1.1.1.1" > etc/resolv.conf
+	apt install squashfs-tools -y
+	unsquashfs $tarball
+	mv squashfs-root/* ./
+	rmdir squashfs-root||exit
+	echo "nameserver 8.8.8.8
+nameserver 8.8.4.4
+nameserver 223.5.5.5
+nameserver 223.6.6.6" > etc/resolv.conf
 	cd "$cur"
 fi
 mkdir -p binds
@@ -54,10 +59,12 @@ command+=" -b /proc"
 #command+=" -b /data/data/com.termux/files/home:/root"
 command+=" -w /root"
 command+=" /usr/bin/env -i"
+command+=" USER=root"
 command+=" HOME=/root"
+command+=" LD_LIBRARY_PATH=/usr/local/lib"
 command+=" PATH=/usr/local/sbin:/usr/local/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games"
 command+=" TERM=\$TERM"
-command+=" LANG=C.UTF-8"
+command+=" LANG=zh_CN.UTF-8"
 command+=" /bin/bash --login"
 com="\$@"
 if [ -z "\$1" ];then
@@ -67,8 +74,6 @@ else
 fi
 EOM
 
-echo "fixing shebang of $bin"
 termux-fix-shebang $bin
-echo "making $bin executable"
 chmod +x $bin
 echo "You can now launch Ubuntu with the ./${bin} script"
