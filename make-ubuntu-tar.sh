@@ -1,5 +1,5 @@
 #!/bin/sh
-echo 'architecture: (arm64/armhf/i386/amd64) (run "dpkg --print-architecture" in Termux to display it)'
+echo 'architecture: (arm64/armhf/i386/amd64) (run "ubuntu.sh" in Termux to display it)'
 read arch
 
 file=bionic-server-cloudimg-$arch.squashfs

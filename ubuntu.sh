@@ -4,7 +4,20 @@ if [ -d "$folder" ]; then
 	first=1
 	echo "skipping downloading"
 fi
-arch=$(dpkg --print-architecture)
+
+case $(dpkg --print-architecture) in
+aarch64)
+	arch="arm64" ;;
+arm)
+	arch="armhf" ;;
+amd64)
+	arch="amd64" ;;
+i*86)
+	arch="i386" ;;
+*)
+echo "unknown architecture"; exit 1 ;;
+esac
+
 tarball=ubuntu-$arch.tar.gz
 if [ "$first" != 1 ];then
 	if [ ! -f $tarball ]; then
