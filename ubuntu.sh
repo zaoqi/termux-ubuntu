@@ -32,9 +32,8 @@ if [ "$first" != 1 ];then
 	mkdir -p run/systemd/resolve
 	touch run/systemd/resolve/stub-resolv.conf
 	echo "nameserver 8.8.8.8
-nameserver 8.8.4.4
 nameserver 223.5.5.5
-nameserver 223.6.6.6" > etc/resolv.conf
+nameserver 114.114.114.114" > etc/resolv.conf
 	cd "$cur"
 fi
 mkdir -p binds
@@ -56,8 +55,9 @@ if [ -n "\$(ls -A binds)" ]; then
 fi
 command+=" -b /dev"
 command+=" -b /proc"
-## uncomment the following line to have access to the home directory of termux
-#command+=" -b /data/data/com.termux/files/home:/root"
+command+=" -b /data/data/com.termux/files/home:/TERMUX_HOME"
+command+=" -b /data/data/com.termux/files:/TERMUX_ROOT"
+command+=" -b /:/ANDROID_ROOT"
 command+=" -w /root"
 command+=" /usr/bin/env -i"
 command+=" USER=root"
