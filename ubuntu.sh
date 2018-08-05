@@ -4,32 +4,18 @@ if [ -d "$folder" ]; then
 	first=1
 	echo "skipping downloading"
 fi
-tarball="ubuntu.squashfs"
+arch=$(dpkg --print-architecture)
+tarball=ubuntu-$arch.tar.gz
 if [ "$first" != 1 ];then
 	if [ ! -f $tarball ]; then
-		echo "downloading ubuntu-image"
-		case `dpkg --print-architecture` in
-		aarch64)
-			archurl="arm64" ;;
-		arm)
-			archurl="armhf" ;;
-		amd64)
-			archurl="amd64" ;;
-		i*86)
-			archurl="i386" ;;
-		*)
-			echo "unknown architecture"; exit 1 ;;
-		esac
-		wget "http://mirrors.ustc.edu.cn/ubuntu-cloud-images/bionic/20180802/bionic-server-cloudimg-${archurl}.squashfs" -O $tarball
+		echo 'You need to run make-ubuntu-tar.sh in Debian GNU/Linux'
+		exit 1
 	fi
 	cur=`pwd`
 	mkdir -p "$folder"
 	cd "$folder"
 	echo "decompressing ubuntu image"
-	apt install squashfs-tools -y ||exit
-	unsquashfs $tarball
-	mv squashfs-root/* ./
-	rmdir squashfs-root||exit
+	proot --link2symlink tar -xf ${cur}/${tarball} --exclude='dev'||:
 	echo "nameserver 8.8.8.8
 nameserver 8.8.4.4
 nameserver 223.5.5.5
@@ -40,7 +26,7 @@ mkdir -p binds
 bin=start-ubuntu.sh
 echo "writing launch script"
 cat > $bin <<- EOM
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 cd \$(dirname \$0)
 ## unset LD_PRELOAD in case termux-exec is installed
 unset LD_PRELOAD
@@ -61,6 +47,7 @@ command+=" -w /root"
 command+=" /usr/bin/env -i"
 command+=" USER=root"
 command+=" HOME=/root"
+command+=" DISPLAY=:0"
 command+=" LD_LIBRARY_PATH=/usr/local/lib"
 command+=" PATH=/usr/local/sbin:/usr/local/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games"
 command+=" TERM=\$TERM"
@@ -74,6 +61,5 @@ else
 fi
 EOM
 
-termux-fix-shebang $bin
 chmod +x $bin
 echo "You can now launch Ubuntu with the ./${bin} script"
