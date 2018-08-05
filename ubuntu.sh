@@ -29,6 +29,8 @@ if [ "$first" != 1 ];then
 	cd "$folder"
 	echo "decompressing ubuntu image"
 	proot --link2symlink tar -xf ${cur}/${tarball} --exclude='dev'||:
+	mkdir -p run/systemd/resolve
+	touch run/systemd/resolve/stub-resolv.conf
 	echo "nameserver 8.8.8.8
 nameserver 8.8.4.4
 nameserver 223.5.5.5
