@@ -8,7 +8,7 @@ arch=$(dpkg --print-architecture)
 tarball=ubuntu-$arch.tar.gz
 if [ "$first" != 1 ];then
 	if [ ! -f $tarball ]; then
-		echo 'You need to run make-ubuntu-tar.sh in Debian GNU/Linux'
+		echo "You need to run make-ubuntu-tar.sh in Debian GNU/Linux architecture:$arch"
 		exit 1
 	fi
 	cur=`pwd`
