@@ -13,4 +13,5 @@ cd $m
 sudo tar -czf "$out" * || exit 1
 cd "$dir"
 sudo chown a+r "$out" || exit 1
-sudo umount $m
+sudo umount $m || exit 1
+rm $file
