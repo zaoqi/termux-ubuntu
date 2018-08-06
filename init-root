@@ -3,5 +3,10 @@ sed -i "s|http://archive.ubuntu.com|http://mirrors.ustc.edu.cn|g" /etc/apt/sourc
 sed -i "s|http://ports.ubuntu.com|http://mirrors.ustc.edu.cn|g" /etc/apt/sources.list
 apt update ||exit
 apt full-upgrade -y ||exit
-apt install locales language-selector-common tightvncserver nano lxde-core language-pack-zh-* -y ||exit
-dpkg-reconfigure locales
+apt install locales language-selector-common tightvncserver nano lxde language-pack-zh-* -y ||exit
+xs=""
+for x in $(check-language-support)
+do
+xs="$xs $(echo $x|grep ^font)"
+done
+apt install $xs
