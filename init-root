@@ -1,15 +1,21 @@
 #!/bin/sh
-sed -i "s|http://archive.ubuntu.com|http://mirrors.ustc.edu.cn|g" /etc/apt/sources.list
-sed -i "s|http://ports.ubuntu.com|http://mirrors.ustc.edu.cn|g" /etc/apt/sources.list
-apt update
-apt full-upgrade -y
-until apt install locales language-selector-common tightvncserver nano lxde language-pack-zh-* -y
+must(){
+until "$@"
 do
 echo
 done
+}
+sed -i "s|http://archive.ubuntu.com|http://mirrors.ustc.edu.cn|g" /etc/apt/sources.list
+sed -i "s|http://ports.ubuntu.com|http://mirrors.ustc.edu.cn|g" /etc/apt/sources.list
+must apt update
+must apt full-upgrade -y
+must apt install locales language-selector-common tightvncserver nano lxde-core language-pack-zh-* -y
 xs=""
 for x in $(check-language-support)
 do
 xs="$xs $(echo $x|grep ^font)"
 done
-apt install $xs -y
+must apt install $xs -y
+vncserver :0
+vncserver -kill :0
+echo 'startlxde' >> $HOME/.vnc/xstartup
