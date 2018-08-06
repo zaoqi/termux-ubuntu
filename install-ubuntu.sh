@@ -42,6 +42,8 @@ echo "writing launch script"
 cat > $bin <<- EOM
 #!/data/data/com.termux/files/usr/bin/bash
 cd \$(dirname \$0)
+rm -fr "$folder/tmp"
+mkdir "$folder/tmp"
 ## unset LD_PRELOAD in case termux-exec is installed
 unset LD_PRELOAD
 command="proot"
@@ -68,7 +70,6 @@ command+=" LD_LIBRARY_PATH=/usr/local/lib"
 command+=" PATH=/usr/local/sbin:/usr/local/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games"
 command+=" TERM=\$TERM"
 command+=" LANG=zh_CN.UTF-8"
-command+=" TZ=Asia/Shanghai"
 command+=" /bin/bash --login"
 com="\$@"
 if [ -z "\$1" ];then
