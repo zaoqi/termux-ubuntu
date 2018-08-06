@@ -1,2 +1,4 @@
 *.squashfs
 ubuntu-*.tar.gz
+ubuntu-fs
+start-ubuntu.sh
