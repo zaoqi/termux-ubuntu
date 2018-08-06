@@ -68,6 +68,7 @@ command+=" LD_LIBRARY_PATH=/usr/local/lib"
 command+=" PATH=/usr/local/sbin:/usr/local/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games"
 command+=" TERM=\$TERM"
 command+=" LANG=zh_CN.UTF-8"
+command+=" TZ=Asia/Shanghai"
 command+=" /bin/bash --login"
 com="\$@"
 if [ -z "\$1" ];then
