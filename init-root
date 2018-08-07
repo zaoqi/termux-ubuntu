@@ -20,5 +20,9 @@ tightvncserver :0
 tightvncserver -kill :0
 echo 'startlxde' >> $HOME/.vnc/xstartup
 echo '#!/bin/sh
-exec tightvncserver -geometry 825x1200 :0' > $HOME/x
+exec tightvncserver -geometry 823x875 :0' > $HOME/x
+echo '#!/bin/sh
+exec tightvncserver -kill :0' > $HOME/stop-x
 chmod +x $HOME/x
+chmod +x $HOME/stop-x
+echo 'export TZ=Asia/Shanghai' >> $HOME/.bashrc
